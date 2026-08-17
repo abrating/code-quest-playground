@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
-import { Sparkles, Terminal, Globe } from 'lucide-react';
+import { Sparkles, Terminal, Globe, BookMarked } from 'lucide-react';
 import CodeEditor from './components/Editor.jsx';
 import OutputConsole from './components/OutputConsole.jsx';
 import TopicSelector from './components/TopicSelector.jsx';
 import WebBuilder from './components/WebBuilder.jsx';
+import FormulaSheet from './components/FormulaSheet.jsx';
 import { TOPICS } from './snippets/starterSnippets.js';
 import { runInSandbox, friendlyError } from './utils/sandboxRunner.js';
 
@@ -14,6 +15,7 @@ const MODES = [
 
 export default function App() {
   const [mode, setMode] = useState('console');
+  const [showFormulas, setShowFormulas] = useState(false);
   const [activeTopic, setActiveTopic] = useState(TOPICS[0]);
   const [code, setCode] = useState(TOPICS[0].code);
   const [entries, setEntries] = useState([]);
@@ -88,7 +90,18 @@ export default function App() {
 
       {mode === 'console' ? (
         <>
-          <TopicSelector activeTopicId={activeTopic.id} onSelect={handleSelectTopic} />
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1">
+              <TopicSelector activeTopicId={activeTopic.id} onSelect={handleSelectTopic} />
+            </div>
+            <button
+              onClick={() => setShowFormulas(true)}
+              className="flex shrink-0 items-center gap-1.5 rounded-lg border border-surface-700 bg-surface-900 px-3 py-2 text-sm font-medium text-slate-300 transition hover:border-brand-500/50 hover:text-slate-100"
+            >
+              <BookMarked size={15} />
+              JS Formulas
+            </button>
+          </div>
 
           <main className="grid min-h-0 flex-1 grid-cols-1 gap-4 md:grid-cols-2">
             <CodeEditor
@@ -100,6 +113,8 @@ export default function App() {
             />
             <OutputConsole entries={entries} onClear={() => setEntries([])} />
           </main>
+
+          {showFormulas && <FormulaSheet onClose={() => setShowFormulas(false)} />}
         </>
       ) : (
         <WebBuilder />
