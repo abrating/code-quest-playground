@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-surface-950 text-slate-100 antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand-500/40;
+  }
+}
+
+/* react-simple-code-editor hardcodes pre-wrap inline; force no-wrap so the
+   line-number gutter in CodeSurface stays in sync with each logical line. */
+.code-nowrap {
+  white-space: pre !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: theme('colors.surface.700');
+    border-radius: 8px;
+  }
+}
